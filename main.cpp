@@ -12,7 +12,7 @@ int main() {
     string plaintext;
     string ciphertext;
     string outName;
-    char car;
+    char passChar;
     cout << "please, choose 1 for encryption process otherwise for decryption: ";
     if (cin.peek() == '1') {
         cin.clear();
@@ -28,22 +28,21 @@ int main() {
         getline(cin, outName);
         cout << "enter a password: ";
         cin >> password;
-        for (int i = 0; i < plaintext.size(); i++) {
-            if (isalpha(plaintext[i]) || isdigit(plaintext[i])) {
-                short alphaPostion = alphabet.find(tolower(plaintext[i]));
+        for (char plainTxtChar : plaintext) {
+            if (isalpha(plainTxtChar) || isdigit(plainTxtChar)) {
+                short alphaPostion = alphabet.find(tolower(plainTxtChar));
                 if (alphaPostion != string::npos) {
                     int password_limits = alphaPostion % password.size();
-                    if (isupper(plaintext[i]))
-                        car = toupper(password[password_limits]);
-                    else car = password[password_limits];
-                    ciphertext += car;
+                    passChar = password[password_limits];
+                    ciphertext += passChar;
                     if (password_limits != 0 &&
-                        (password.substr(password_limits)).find(password[password_limits]) != string::npos)
+                        (password.substr(password_limits)).find(passChar) != string::npos) {
                         if (isdigit(ciphertext[ciphertext.size() - 1])) ciphertext += ',';
-                    ciphertext += to_string(password_limits) + '#';
+                        ciphertext += to_string(password_limits) + '#';
+                    }
                     ciphertext += to_string(alphaPostion - password_limits) + '$';
                 }
-            } else ciphertext += plaintext[i];
+            } else ciphertext += plainTxtChar;
         }
         if (ciphertext[ciphertext.size() - 1] != '$')
             ciphertext += '$';
@@ -89,9 +88,9 @@ int main() {
                 int number = num.empty() ? 0 : stoi(num);
                 if (repeated != 0)passwordPosition = 0;
                 if (isupper(ciphertext[i]))
-                    car = toupper(alphabet[number + passwordPosition + repeated]);
-                else car = alphabet[number + passwordPosition + repeated];
-                plaintext += car;
+                    passChar = toupper(alphabet[number + passwordPosition + repeated]);
+                else passChar = alphabet[number + passwordPosition + repeated];
+                plaintext += passChar;
             }
         }
         ofstream output(outName + ".txt");
